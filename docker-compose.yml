@@ -1,0 +1,19 @@
+﻿version: '3.8 '
+
+services:
+  mediporta:
+    image: mediporta
+    build:
+      context: .
+      dockerfile: Mediporta/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"
+  mediporta-database:
+    image: postgres:latest
+    environment:
+        POSTGRES_DB: mediporta
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+    ports:
+        - 5432:5432
