@@ -10,14 +10,10 @@ builder.Services.AddDbContext<AppDbContext>(
 
 var app = builder.Build();
 
-
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
-
+app.MapGet("/", () => "hello world");
 
 app.Run();
