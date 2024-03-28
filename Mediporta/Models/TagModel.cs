@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Mediporta.Models;
 
@@ -11,11 +12,12 @@ public class TagModel
     public bool HasSynonyms { get; set; }
     public bool IsModeratorOnly { get; set; }
     public bool IsRequired { get; set; }
+    [JsonPropertyName("lastActivityDate")]
     public DateTime? LastActivityDate { get; set; }
-    public List<string> Synonyms { get; set; } = new List<string>();
+    [JsonPropertyName("synonyms")]
+    public List<string> Synonyms { get; set; } = new();
+    [JsonPropertyName("userId")]
     public int? UserId { get; set; }
-
-    // New: Navigation property to Collective
-    public int? CollectiveId { get; set; }
-    public CollectiveModel Collective { get; set; }
+    [JsonPropertyName("collectives")]
+    public List<CollectiveModel>? Collectives { get; set; } = new();
 }

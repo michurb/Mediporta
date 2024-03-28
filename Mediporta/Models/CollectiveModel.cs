@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Mediporta.Models;
 
@@ -10,8 +11,8 @@ public class CollectiveModel
     public string Link { get; set; }
     public string Name { get; set; }
     public string Slug { get; set; }
-    
-    public List<CollectiveExternalLinkModel> ExternalLinks { get; set; } = new List<CollectiveExternalLinkModel>();
-    
-    public List<TagModel> Tags { get; set; } = new List<TagModel>();
+    [JsonPropertyName("external_links")]
+    public List<CollectiveExternalLinkModel> ExternalLinks { get; set; }
+
+    public List<string>? Tags { get; set; } = new();
 }

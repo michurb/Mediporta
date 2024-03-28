@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mediporta.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mediporta.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328191211_Change")]
+    partial class Change
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,32 +26,44 @@ namespace Mediporta.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CollectiveModelTagModel", b =>
+                {
+                    b.Property<int>("CollectiveId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TagsTagId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CollectiveId", "TagsTagId");
+
+                    b.HasIndex("TagsTagId");
+
+                    b.ToTable("CollectiveModelTagModel");
+                });
+
             modelBuilder.Entity("Mediporta.Models.CollectiveExternalLinkModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CollectiveExternalLinkId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CollectiveExternalLinkId"));
 
-                    b.Property<int?>("CollectiveModelCollectiveId")
+                    b.Property<int>("CollectiveId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Link")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("CollectiveExternalLinkId");
 
-                    b.HasIndex("CollectiveModelCollectiveId");
+                    b.HasIndex("CollectiveId");
 
                     b.ToTable("CollectiveExternalLinks");
-
-                    b.HasAnnotation("Relational:JsonPropertyName", "external_links");
                 });
 
             modelBuilder.Entity("Mediporta.Models.CollectiveModel", b =>
@@ -75,20 +90,9 @@ namespace Mediporta.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("TagModelTagId")
-                        .HasColumnType("integer");
-
-                    b.Property<List<string>>("Tags")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.HasKey("CollectiveId");
 
-                    b.HasIndex("TagModelTagId");
-
                     b.ToTable("Collectives");
-
-                    b.HasAnnotation("Relational:JsonPropertyName", "collectives");
                 });
 
             modelBuilder.Entity("Mediporta.Models.TagModel", b =>
@@ -112,8 +116,7 @@ namespace Mediporta.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastActivityDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasAnnotation("Relational:JsonPropertyName", "lastActivityDate");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,40 +124,45 @@ namespace Mediporta.Migrations
 
                     b.Property<List<string>>("Synonyms")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasAnnotation("Relational:JsonPropertyName", "synonyms");
+                        .HasColumnType("text[]");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Relational:JsonPropertyName", "userId");
+                        .HasColumnType("integer");
 
                     b.HasKey("TagId");
 
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Mediporta.Models.CollectiveExternalLinkModel", b =>
+            modelBuilder.Entity("CollectiveModelTagModel", b =>
                 {
                     b.HasOne("Mediporta.Models.CollectiveModel", null)
-                        .WithMany("ExternalLinks")
-                        .HasForeignKey("CollectiveModelCollectiveId");
+                        .WithMany()
+                        .HasForeignKey("CollectiveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mediporta.Models.TagModel", null)
+                        .WithMany()
+                        .HasForeignKey("TagsTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Mediporta.Models.CollectiveModel", b =>
+            modelBuilder.Entity("Mediporta.Models.CollectiveExternalLinkModel", b =>
                 {
-                    b.HasOne("Mediporta.Models.TagModel", null)
-                        .WithMany("Collectives")
-                        .HasForeignKey("TagModelTagId");
+                    b.HasOne("Mediporta.Models.CollectiveModel", "Collective")
+                        .WithMany("ExternalLinks")
+                        .HasForeignKey("CollectiveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collective");
                 });
 
             modelBuilder.Entity("Mediporta.Models.CollectiveModel", b =>
                 {
                     b.Navigation("ExternalLinks");
-                });
-
-            modelBuilder.Entity("Mediporta.Models.TagModel", b =>
-                {
-                    b.Navigation("Collectives");
                 });
 #pragma warning restore 612, 618
         }

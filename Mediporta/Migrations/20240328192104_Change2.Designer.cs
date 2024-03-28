@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mediporta.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mediporta.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328192104_Change2")]
+    partial class Change2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,24 +28,17 @@ namespace Mediporta.Migrations
 
             modelBuilder.Entity("Mediporta.Models.CollectiveExternalLinkModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Link")
+                        .HasColumnType("text");
 
                     b.Property<int?>("CollectiveModelCollectiveId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Link");
 
                     b.HasIndex("CollectiveModelCollectiveId");
 
@@ -78,10 +74,6 @@ namespace Mediporta.Migrations
                     b.Property<int?>("TagModelTagId")
                         .HasColumnType("integer");
 
-                    b.Property<List<string>>("Tags")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.HasKey("CollectiveId");
 
                     b.HasIndex("TagModelTagId");
@@ -112,8 +104,7 @@ namespace Mediporta.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastActivityDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasAnnotation("Relational:JsonPropertyName", "lastActivityDate");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,12 +112,10 @@ namespace Mediporta.Migrations
 
                     b.Property<List<string>>("Synonyms")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasAnnotation("Relational:JsonPropertyName", "synonyms");
+                        .HasColumnType("text[]");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("integer")
-                        .HasAnnotation("Relational:JsonPropertyName", "userId");
+                        .HasColumnType("integer");
 
                     b.HasKey("TagId");
 
