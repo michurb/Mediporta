@@ -6,6 +6,8 @@ using Mediporta.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -26,11 +28,11 @@ builder.Services.AddDbContext<AppDbContext>(
 
 var app = builder.Build();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.MapControllers();
-app.MapGet("/", () => "hello world");
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
 
 app.Run();

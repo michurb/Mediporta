@@ -87,12 +87,27 @@ public class TagService
         foreach (var tag in allTags)
         {
             var percentage = (tag.Count / (double)totalCount) * 100;
-            Console.WriteLine($"Tag: {tag.Name}, Percentage: {percentage:F2}% of total population");
+            _logger.LogInformation($"Tag: {tag.Name}, Percentage: {percentage:F2}% of total population");
         }
         Console.WriteLine();
         await _tagRepository.SaveTagsAsync(allTags.Take(tagsNumber));
         _logger.LogInformation("Fetching tags finished");
         return allTags.Take(tagsNumber);
+    }
+
+    public async Task<IEnumerable<TagModel>> GetPagedTagsAsync(int pageNumber = 1, int pageSize = 10,
+        string orderBy = "Name", string sortDirection = "asc")
+    {
+        var tags = await _tagRepository.GetTagsAsync();
+        if(sortDirection.ToLower() == "asc")
+        { 
+            tags = orderBy.ToLower() == "name" ? tags.OrderByDescending(t => t.Name) : tags.OrderByDescending(t => t.Count);
+        }
+        else
+        {
+            tags = orderBy.ToLower() == "name" ? tags.OrderBy(t => t.Name) : tags.OrderBy(t => t.Count);
+        }
+        return tags.Skip((pageNumber - 1) * pageSize).Take(pageSize);
     }
 }
 
