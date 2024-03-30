@@ -8,16 +8,19 @@ public class TagService
 {
     private readonly HttpClient _httpClient;
     private readonly ITagRepository _tagRepository;
+    private readonly ILogger<TagService> _logger;
 
-    public TagService(IHttpClientFactory httpClient, ITagRepository tagRepository)
+    public TagService(IHttpClientFactory httpClient, ITagRepository tagRepository, ILogger<TagService> logger)
     {
         _httpClient = httpClient.CreateClient("StackExchangeClient");
         _tagRepository = tagRepository;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<TagModel>> FetchTagsAsync(int pageSize = 100, int tagsNumber = 1000)
     {
         await _tagRepository.DeleteAllTagsAsync();
+        _logger.LogInformation("Fetching tags started...");
         List<TagModel> allTags = new();
         int pageNumber = 1;
         bool keepFetching = true;
@@ -27,6 +30,7 @@ public class TagService
             var response = await _httpClient.GetAsync($"tags?page={pageNumber}&pagesize={pageSize}&order=desc&sort=popular&site=stackoverflow");
             if (response.IsSuccessStatusCode)
             {
+                _logger.LogInformation("Resposne is successful");
                 var result = await JsonSerializer.DeserializeAsync<StackExchangeResponse>(await response.Content.ReadAsStreamAsync(), 
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
@@ -72,13 +76,22 @@ public class TagService
             }
             else
             {
+                _logger.LogError("Failed to fetch tags");
                 keepFetching = false;
             }
 
             pageNumber++;
         }
+        var totalCount = allTags.Sum(tag => tag.Count);
 
+        foreach (var tag in allTags)
+        {
+            var percentage = (tag.Count / (double)totalCount) * 100;
+            Console.WriteLine($"Tag: {tag.Name}, Percentage: {percentage:F2}% of total population");
+        }
+        Console.WriteLine();
         await _tagRepository.SaveTagsAsync(allTags.Take(tagsNumber));
+        _logger.LogInformation("Fetching tags finished");
         return allTags.Take(tagsNumber);
     }
 }
