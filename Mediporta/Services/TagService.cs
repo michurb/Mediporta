@@ -110,8 +110,3 @@ public class TagService
         return tags.Skip((pageNumber - 1) * pageSize).Take(pageSize);
     }
 }
-
-public class StackExchangeResponse
-{
-    public List<TagModel> Items { get; set; }
-}
