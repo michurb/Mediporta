@@ -7,10 +7,10 @@ namespace Mediporta.Controllers;
 [Route("api/[controller]")]
 public class TagsController : ControllerBase
 {
-    private readonly TagService _tagService;
+    private readonly ITagService _tagService;
     private readonly ILogger<TagsController> _logger;
 
-    public TagsController(TagService tagService, ILogger<TagsController> logger)
+    public TagsController(ITagService tagService, ILogger<TagsController> logger)
     {
         _tagService = tagService;
         _logger = logger;
@@ -21,7 +21,7 @@ public class TagsController : ControllerBase
     {
         try
         {
-            var tags = await _tagService.FetchTagsAsync();
+            var tags = await _tagService.FetchTagsAsync(100, 1000);
             _logger.LogInformation("Fetched tags successfully");
             return Ok(tags);
         }

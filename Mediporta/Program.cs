@@ -6,8 +6,10 @@ using Mediporta.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
 builder.Logging.AddConsole();
-builder.Logging.AddDebug();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -23,8 +25,7 @@ builder.Services.AddHttpClient("StackExchangeClient", httpClient =>
     });
 
 builder.Services.AddScoped<ITagRepository, TagRepository>();
-builder.Services.AddDbContext<AppDbContext>(
-    options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+builder.Services.AddScoped<ITagService, TagService>();
 
 var app = builder.Build();
 

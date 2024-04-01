@@ -79,7 +79,6 @@ namespace Mediporta.Migrations
                         .HasColumnType("integer");
 
                     b.Property<List<string>>("Tags")
-                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.HasKey("CollectiveId");

@@ -4,7 +4,7 @@ using Mediporta.Repositories;
 
 namespace Mediporta.Services;
 
-public class TagService
+public class TagService : ITagService
 {
     private readonly HttpClient _httpClient;
     private readonly ITagRepository _tagRepository;
@@ -17,7 +17,7 @@ public class TagService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<TagModel>> FetchTagsAsync(int pageSize = 100, int tagsNumber = 1000)
+    public async Task<IEnumerable<TagModel>> FetchTagsAsync(int pageSize, int tagsNumber)
     {
         await _tagRepository.DeleteAllTagsAsync();
         _logger.LogInformation("Fetching tags started...");

@@ -9,13 +9,3 @@ public class CollectiveExternalLinkModel
     public string Link { get; set; }
     public string Type { get; set; }
 }
-public enum ExternalLinkType
-{
-    Website,
-    Twitter,
-    Github,
-    Facebook,
-    Instagram,
-    Support,
-    Linkedin
-}
