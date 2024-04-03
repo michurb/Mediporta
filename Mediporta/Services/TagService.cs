@@ -89,7 +89,6 @@ public class TagService : ITagService
             var percentage = (tag.Count / (double)totalCount) * 100;
             _logger.LogInformation($"Tag: {tag.Name}, Percentage: {percentage:F2}% of total population");
         }
-        Console.WriteLine();
         await _tagRepository.SaveTagsAsync(allTags.Take(tagsNumber));
         _logger.LogInformation("Fetching tags finished");
         return allTags.Take(tagsNumber);

@@ -1,4 +1,6 @@
-﻿namespace Mediporta.Models;
+﻿using Mediporta.Models;
+
+namespace Mediporta.Services;
 
 public class StackExchangeResponse
 {

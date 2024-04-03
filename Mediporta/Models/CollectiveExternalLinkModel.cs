@@ -2,7 +2,7 @@
 
 namespace Mediporta.Models;
 
-public class CollectiveExternalLinkModel
+public sealed class CollectiveExternalLinkModel
 {
     [Key]
     public int Id { get; set; }

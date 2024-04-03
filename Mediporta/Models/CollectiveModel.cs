@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Mediporta.Models;
 
-public class CollectiveModel
+public sealed class CollectiveModel
 {
     [Key]
     public int CollectiveId { get; set; }

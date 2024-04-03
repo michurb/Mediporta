@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mediporta.Models;
 
-public class AppDbContext : DbContext
+public sealed class AppDbContext : DbContext
 {
  public DbSet<TagModel> Tags { get; set; }
  public DbSet<CollectiveModel> Collectives { get; set; }

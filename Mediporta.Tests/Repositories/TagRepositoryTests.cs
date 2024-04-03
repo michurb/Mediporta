@@ -64,7 +64,7 @@ public class TagRepositoryTests
     public TagRepositoryTests()
     {
         _options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         using (var context = new AppDbContext(_options))

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mediporta.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class TagsController : ControllerBase
+public sealed class TagsController : ControllerBase
 {
     private readonly ITagService _tagService;
     private readonly ILogger<TagsController> _logger;

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Mediporta.Models;
 
-public class TagModel
+public sealed class TagModel
 {
     [Key]
     public int TagId { get; set; }

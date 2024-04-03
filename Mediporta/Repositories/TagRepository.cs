@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mediporta.Repositories;
 
-public class TagRepository : ITagRepository
+public sealed class TagRepository : ITagRepository
 {
     private readonly AppDbContext _context;
 
